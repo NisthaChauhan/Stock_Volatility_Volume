@@ -55,26 +55,27 @@ class StockVolatilityAnalyzer:
         print("\n[STEP 2/4] Fitting regression models...")
         self.results = self.fitter.fit_all_models(self.X, self.y)
         
-        # Step 3: Rank and select best model
         print("\n[STEP 3/4] Analyzing model performance...")
-        self.selector.print_rankings(self.results, metric=metric)
-        print(self.selector.get_recommendation(self.results))
-        
+        # ← FIXED: pass self.X
+        self.selector.print_rankings(self.results, self.X, metric=metric)
+        # ← FIXED: pass self.X
+        print(self.selector.get_recommendation(self.results, self.X))
+
         # Step 4: Create visualizations
         if create_plots:
             print("\n[STEP 4/4] Creating visualizations...")
             plots_dir = os.path.join(output_dir, self.ticker)
+            os.makedirs(plots_dir, exist_ok=True)   # make sure folder exists
             self.visualizer = ModelVisualizer(self.ticker)
             self.visualizer.plot_all_models(self.X, self.y, self.results, plots_dir)
             
-            # Also create a comparison plot
             comparison_path = os.path.join(plots_dir, f'{self.ticker}_comparison.png')
             self.visualizer.plot_comparison_summary(self.X, self.y, self.results, 
                                                    comparison_path)
-        
+
         # Export results to CSV
         csv_path = os.path.join(output_dir, f'{self.ticker}_results.csv')
-        self.selector.export_results(self.results, self.ticker, csv_path)
+        self.selector.export_results(self.results, self.X, self.ticker, csv_path)
         
         print("\n" + "="*80)
         print("✅ ANALYSIS COMPLETE!")
@@ -82,7 +83,7 @@ class StockVolatilityAnalyzer:
         
         return True
     
-    def get_best_model_details(self):
+    '''def get_best_model_details(self):
         """Returns details of the best performing model"""
         if self.results is None:
             return None
@@ -95,9 +96,23 @@ class StockVolatilityAnalyzer:
             'r2': best_result['r2'],
             'mae': best_result['mae'],
             'params': best_result['params']
+        }'''
+
+def get_best_model_details(self):
+        """Returns details of the best performing model"""
+        if self.results is None:
+            return None
+        
+        # This method already works – it uses self.results only
+        best_name, best_result = self.selector.get_best_model(self.results)
+        return {
+            'ticker': self.ticker,
+            'model': best_name,
+            'rmse': best_result['rmse'],
+            'r2': best_result['r2'],
+            'mae': best_result['mae'],
+            'params': best_result['params']
         }
-
-
 def interactive_mode():
     """Runs the analyzer in interactive mode"""
     print("\n" + "="*80)
