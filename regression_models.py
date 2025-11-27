@@ -180,7 +180,7 @@ class RegressionModels:
             dict: {model_name: latex_equation}
         """
         return {
-            'Linear': r'$\Delta Vol = a \cdot \Delta V + b
+            'Linear': r'$\Delta Vol = a \cdot \Delta V + b'}
 
 
 class ModelFitter:
