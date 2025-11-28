@@ -108,12 +108,7 @@ class ModelVisualizer:
         
         plt.tight_layout(rect=[0, 0, 0.85, 0.98])
         
-        if save_path:
-            plt.savefig(save_path, dpi=300, bbox_inches='tight', 
-                       facecolor='white', edgecolor='none')
-            print(f"  💾 Saved: {os.path.basename(save_path)}")
-        else:
-            plt.show()
+        plt.show()
         
         plt.close()
     
@@ -297,12 +292,7 @@ class ModelVisualizer:
         
         plt.tight_layout(rect=[0, 0.02, 1, 0.99])
         
-        if save_path:
-            plt.savefig(save_path, dpi=300, bbox_inches='tight',
-                       facecolor='white', edgecolor='none')
-            print(f"  💾 Saved top models: {os.path.basename(save_path)}")
-        else:
-            plt.show()
+        plt.show()
         
         plt.close()
     
@@ -362,12 +352,7 @@ class ModelVisualizer:
         
         plt.tight_layout(rect=[0, 0, 1, 0.97])
         
-        if save_path:
-            plt.savefig(save_path, dpi=300, bbox_inches='tight',
-                       facecolor='white', edgecolor='none')
-            print(f"  💾 Saved residual analysis: {os.path.basename(save_path)}")
-        else:
-            plt.show()
+        plt.show()
         
         plt.close()
     
