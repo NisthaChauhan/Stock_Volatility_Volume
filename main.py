@@ -62,7 +62,7 @@ class StockVolatilityAnalyzer:
         print(self.selector.get_recommendation(self.results, self.X))
 
         # Step 4: Create visualizations
-        if create_plots:
+        '''if create_plots:
             print("\n[STEP 4/4] Creating visualizations...")
             plots_dir = os.path.join(output_dir, self.ticker)
             os.makedirs(plots_dir, exist_ok=True)   # make sure folder exists
@@ -72,7 +72,11 @@ class StockVolatilityAnalyzer:
             comparison_path = os.path.join(plots_dir, f'{self.ticker}_comparison.png')
             self.visualizer.plot_comparison_summary(self.X, self.y, self.results, 
                                                    comparison_path)
-
+        '''
+        if create_plots:
+            print("\n[STEP 4/4] Displaying visualizations...")
+            self.visualizer = ModelVisualizer(self.ticker)
+            self.visualizer.create_full_report(self.X, self.y, self.results)
         # Export results to CSV
         csv_path = os.path.join(output_dir, f'{self.ticker}_results.csv')
         self.selector.export_results(self.results, self.X, self.ticker, csv_path)
