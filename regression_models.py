@@ -172,12 +172,6 @@ class RegressionModels:
         }
     @staticmethod
     def get_latex_equations():
-        """
-        Returns LaTeX formatted equations for each model
-        
-        Returns:
-            dict: {model_name: latex_equation}
-        """
         return {
             'Linear':              r'$\Delta\mathrm{Vol} = a \cdot \Delta V + b$',
             'Quadratic':           r'$\Delta\mathrm{Vol} = a \cdot (\Delta V)^2 + b \cdot \Delta V + c$',
@@ -194,11 +188,10 @@ class RegressionModels:
             'Arctangent':          r'$\Delta\mathrm{Vol} = a \cdot \arctan(b \cdot \Delta V) + c$',
             'Rational':            r'$\Delta\mathrm{Vol} = \frac{a \cdot \Delta V + b}{c \cdot |\Delta V| + d} \cdot \operatorname{sign}(\Delta V)$',
             'Damped Sinusoidal':   r'$\Delta\mathrm{Vol} = a \cdot \sin(b \cdot \Delta V) \cdot e^{-c \cdot |\Delta V|} + d$',
-            'Piecewise Linear':    r'$\Delta\mathrm{Vol} = \begin{cases} a \cdot \Delta V + b & \Delta V \geq 0 \\ c \cdot \Delta V + d & \Delta V < 0 \end{cases}$',
+            'Piecewise Linear':    r'$\Delta\mathrm{Vol} = \left\{ \begin{array}{cc} a\Delta V + b & \Delta V \geq 0 \\ c\Delta V + d & \Delta V < 0 \end{array} \right.$',
             'Log-Quadratic':       r'$\Delta\mathrm{Vol} = a \cdot (\Delta V)^2 + b \cdot \log(|\Delta V| + 1) \cdot \operatorname{sign}(\Delta V) + c$',
             'Weibull':             r'$\Delta\mathrm{Vol} = a \cdot \left(1 - e^{-\left(\frac{|\Delta V|}{b}\right)^c}\right) \cdot \operatorname{sign}(\Delta V) + d$',
         }
-    
 class ModelFitter:
     """Fits regression models to data and calculates metrics"""
     
@@ -207,18 +200,7 @@ class ModelFitter:
         self.results = {}
     
     def fit_all_models(self, X, y, max_iterations=10000):
-        """
-        Fits all available models to the data
-        
-        Args:
-            X (np.array): Independent variable (Volume_delta)
-            y (np.array): Dependent variable (Volatility_delta)
-            max_iterations (int): Maximum iterations for curve_fit
-            
-        Returns:
-            dict: Results for each model
-        """
-        print("\n🔧 Fitting models...")
+        print("\nFitting models...")
         
         for name, (model_func, p0) in self.models.items():
             try:
@@ -243,14 +225,14 @@ class ModelFitter:
                     'model_func': model_func
                 }
                 
-                print(f"  ✅ {name}: RMSE={rmse:.6f}, R²={r2:.6f}")
+                # REMOVED THIS LINE → print(f"  ✅ {name}: RMSE={rmse:.6f}, R²={r2:.6f}")
                 
             except Exception as e:
-                print(f"  ❌ {name}: Failed to converge - {str(e)}")
+                # REMOVED THIS LINE → print(f"  ❌ {name}: Failed to converge - {str(e)}")
                 self.results[name] = None
         
         return self.results
-    
+
     def _calculate_rmse(self, y_true, y_pred):
         """Root Mean Squared Error"""
         return np.sqrt(np.mean((y_true - y_pred) ** 2))
