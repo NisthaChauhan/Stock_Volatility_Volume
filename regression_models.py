@@ -188,8 +188,7 @@ class RegressionModels:
             'Arctangent':          r'$\Delta\mathrm{Vol} = a \cdot \arctan(b \cdot \Delta V) + c$',
             'Rational':            r'$\Delta\mathrm{Vol} = \frac{a \cdot \Delta V + b}{c \cdot |\Delta V| + d} \cdot \operatorname{sign}(\Delta V)$',
             'Damped Sinusoidal':   r'$\Delta\mathrm{Vol} = a \cdot \sin(b \cdot \Delta V) \cdot e^{-c \cdot |\Delta V|} + d$',
-            'Piecewise Linear':    r'$\Delta\mathrm{Vol} = \left\{ \begin{array}{cc} a\Delta V + b & \Delta V \geq 0 \\ c\Delta V + d & \Delta V < 0 \end{array} \right.$',
-            'Log-Quadratic':       r'$\Delta\mathrm{Vol} = a \cdot (\Delta V)^2 + b \cdot \log(|\Delta V| + 1) \cdot \operatorname{sign}(\Delta V) + c$',
+'Piecewise Linear': r'$\Delta\mathrm{Vol} = \left\{ \begin{array}{cc} a\Delta V + b & \Delta V \geq 0 \\ c\Delta V + d & \Delta V < 0 \end{array} \right. $',            'Log-Quadratic':       r'$\Delta\mathrm{Vol} = a \cdot (\Delta V)^2 + b \cdot \log(|\Delta V| + 1) \cdot \operatorname{sign}(\Delta V) + c$',
             'Weibull':             r'$\Delta\mathrm{Vol} = a \cdot \left(1 - e^{-\left(\frac{|\Delta V|}{b}\right)^c}\right) \cdot \operatorname{sign}(\Delta V) + d$',
         }
 class ModelFitter:
