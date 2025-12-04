@@ -81,7 +81,8 @@ class StockVolatilityAnalyzer:
         if self.results is None:
             return None
         
-        best_name, best_result = self.fitter.get_best_model(self.results)
+    # ModelFitter stores its own results; call without passing the results dict
+    best_name, best_result = self.fitter.get_best_model()
         return {
             'ticker': self.ticker,
             'model': best_name,
@@ -351,7 +352,8 @@ class StockVolatilityAnalyzer:
         if self.results is None:
             return None
         
-        best_name, best_result = self.fitter.get_best_model(self.results)
+    # ModelFitter stores its own results; call without passing the results dict
+    best_name, best_result = self.fitter.get_best_model()
         return {
             'ticker': self.ticker,
             'model': best_name,
