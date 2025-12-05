@@ -1,4 +1,5 @@
-'''"""
+'''
+"""
 Main Runner - Stock Volatility vs Volume Analysis
 Orchestrates all modules for complete analysis pipeline
 """
@@ -81,8 +82,7 @@ class StockVolatilityAnalyzer:
         if self.results is None:
             return None
         
-    # ModelFitter stores its own results; call without passing the results dict
-    best_name, best_result = self.fitter.get_best_model()
+        best_name, best_result = self.fitter.get_best_model(self.results)
         return {
             'ticker': self.ticker,
             'model': best_name,
@@ -352,8 +352,7 @@ class StockVolatilityAnalyzer:
         if self.results is None:
             return None
         
-    # ModelFitter stores its own results; call without passing the results dict
-    best_name, best_result = self.fitter.get_best_model()
+        best_name, best_result = self.fitter.get_best_model(self.results)
         return {
             'ticker': self.ticker,
             'model': best_name,
