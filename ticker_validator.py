@@ -11,9 +11,9 @@ class TickerValidator:
     """Validates and fetches stock data for a given ticker"""
     
     def __init__(self):
-        self.ticker = None
-        self.data = None
-        self.processed_data = None
+        self.ticker=None
+        self.data=None
+        self.processed_data=None
     
     def validate_ticker(self, ticker_symbol):
         """
@@ -26,22 +26,22 @@ class TickerValidator:
             bool: True if valid, False otherwise
         """
         try:
-            ticker_symbol = ticker_symbol.upper().strip()
-            stock = yf.Ticker(ticker_symbol)
+            ticker_symbol=ticker_symbol.upper().strip()
+            stock=yf.Ticker(ticker_symbol)
             
             # Try to get some basic info to validate
-            info = stock.info
+            info=stock.info
             
             # Check if we can get historical data
-            end_date = datetime.now()
-            start_date = end_date - timedelta(days=10)
-            test_data = stock.history(start=start_date, end=end_date)
+            end_date=datetime.now()
+            start_date=end_date - timedelta(days=10)
+            test_data=stock.history(start=start_date, end=end_date)
             
             if test_data.empty:
                 print(f"❌ No data available for ticker: {ticker_symbol}")
                 return False
             
-            self.ticker = ticker_symbol
+            self.ticker=ticker_symbol
             print(f"✅ Ticker '{ticker_symbol}' is valid!")
             return True
             
@@ -63,19 +63,19 @@ class TickerValidator:
             raise ValueError("No valid ticker set. Please validate a ticker first.")
         
         try:
-            end_date = datetime.now()
-            start_date = end_date - timedelta(days=years*365)
+            end_date=datetime.now()
+            start_date=end_date - timedelta(days=years*365)
             
-            stock = yf.Ticker(self.ticker)
-            data = stock.history(start=start_date, end=end_date)
+            stock=yf.Ticker(self.ticker)
+            data=stock.history(start=start_date, end=end_date)
             
             if data.empty:
                 raise ValueError(f"No data returned for {self.ticker}")
             
             # Reset index to make Date a column
-            data = data.reset_index()
+            data=data.reset_index()
             
-            self.data = data
+            self.data=data
             print(f"✅ Fetched {len(data)} days of data for {self.ticker}")
             print(f"   Date range: {data['Date'].min().date()} to {data['Date'].max().date()}")
             
@@ -95,21 +95,21 @@ class TickerValidator:
         if self.data is None:
             raise ValueError("No data to process. Please fetch data first.")
         
-        df = self.data.copy()
+        df=self.data.copy()
         
-        # Calculate Volatility = (High - Low) / Close
-        df['Volatility'] = (df['High'] - df['Low']) / df['Close']
+        # Calculate Volatility=(High - Low) / Close
+        df['Volatility']=(df['High'] - df['Low']) / df['Close']
         
-        # Calculate Volume_delta = Volume_today - Volume_yesterday
-        df['Volume_delta'] = df['Volume'].diff()
+        # Calculate Volume_delta=Volume_today - Volume_yesterday
+        df['Volume_delta']=df['Volume'].diff()
         
-        # Calculate Volatility_delta = Volatility_today - Volatility_yesterday
-        df['Volatility_delta'] = df['Volatility'].diff()
+        # Calculate Volatility_delta=Volatility_today - Volatility_yesterday
+        df['Volatility_delta']=df['Volatility'].diff()
         
         # Drop rows with NaN values (first row will have NaN for diff operations)
-        df = df.dropna()
+        df=df.dropna()
         
-        self.processed_data = df
+        self.processed_data=df
         print(f"✅ Data processed successfully")
         print(f"   {len(df)} valid data points after processing")
         
@@ -125,8 +125,8 @@ class TickerValidator:
         if self.processed_data is None:
             raise ValueError("No processed data available. Please process data first.")
         
-        X = self.processed_data['Volume_delta'].values
-        y = self.processed_data['Volatility_delta'].values
+        X=self.processed_data['Volume_delta'].values
+        y=self.processed_data['Volatility_delta'].values
         
         return X, y
     
@@ -155,12 +155,12 @@ class TickerValidator:
 
 # Example usage
 if __name__ == "__main__":
-    validator = TickerValidator()
+    validator=TickerValidator()
     
     # Test with a valid ticker
-    ticker = input("Enter ticker symbol (e.g., TSLA, AAPL): ").strip()
+    ticker=input("Enter ticker symbol (e.g., TSLA, AAPL): ").strip()
     
-    X, y = validator.get_full_pipeline(ticker, years=5)
+    X, y=validator.get_full_pipeline(ticker, years=5)
     
     if X is not None:
         print(f"\n📊 Ready for modeling:")
@@ -180,9 +180,9 @@ class TickerValidator:
     """Validates and fetches stock data for a given ticker"""
     
     def __init__(self):
-        self.ticker = None
-        self.data = None
-        self.processed_data = None
+        self.ticker=None
+        self.data=None
+        self.processed_data=None
     
     def validate_ticker(self, ticker_symbol):
         """
@@ -195,21 +195,21 @@ class TickerValidator:
             bool: True if valid, False otherwise
         """
         try:
-            ticker_symbol = ticker_symbol.upper().strip()
-            stock = yf.Ticker(ticker_symbol)
+            ticker_symbol=ticker_symbol.upper().strip()
+            stock=yf.Ticker(ticker_symbol)
             
             # Try to get some basic info to validate
-            info = stock.info
+            info=stock.info
             
             # Check if we can get historical data
-            end_date = datetime.now()
-            start_date = end_date - timedelta(days=10)
-            test_data = stock.history(start=start_date, end=end_date)
+            end_date=datetime.now()
+            start_date=end_date - timedelta(days=10)
+            test_data=stock.history(start=start_date, end=end_date)
             
             if test_data.empty:
                 return False
             
-            self.ticker = ticker_symbol
+            self.ticker=ticker_symbol
             return True
             
         except Exception as e:
@@ -229,23 +229,23 @@ class TickerValidator:
             raise ValueError("No valid ticker set. Please validate a ticker first.")
         
         try:
-            end_date = datetime.now()
-            start_date = end_date - timedelta(days=years*365)
+            end_date=datetime.now()
+            start_date=end_date - timedelta(days=years*365)
             
-            stock = yf.Ticker(self.ticker)
-            data = stock.history(start=start_date, end=end_date)
+            stock=yf.Ticker(self.ticker)
+            data=stock.history(start=start_date, end=end_date)
             
             if data.empty:
                 raise ValueError(f"No data returned for {self.ticker}")
             
             # Reset index to make Date a column
-            data = data.reset_index()
+            data=data.reset_index()
             
-            self.data = data
+            self.data=data
             return data
             
         except Exception as e:
-            print(f"❌ Error fetching data: {str(e)}")
+            print(f"Error fetching data: {str(e)}")
             raise
     
     def process_data(self):
@@ -258,21 +258,21 @@ class TickerValidator:
         if self.data is None:
             raise ValueError("No data to process. Please fetch data first.")
         
-        df = self.data.copy()
+        df=self.data.copy()
         
-        # Calculate Volatility = (High - Low) / Close
-        df['Volatility'] = (df['High'] - df['Low']) / df['Close']
+        # Calculate Volatility=(High - Low) / Close
+        df['Volatility']=(df['High'] - df['Low']) / df['Close']
         
-        # Calculate Volume_delta = Volume_today - Volume_yesterday
-        df['Volume_delta'] = df['Volume'].diff()
+        # Calculate Volume_delta=Volume_today - Volume_yesterday
+        df['Volume_delta']=df['Volume'].diff()
         
-        # Calculate Volatility_delta = Volatility_today - Volatility_yesterday
-        df['Volatility_delta'] = df['Volatility'].diff()
+        # Calculate Volatility_delta=Volatility_today - Volatility_yesterday
+        df['Volatility_delta']=df['Volatility'].diff()
         
         # Drop rows with NaN values (first row will have NaN for diff operations)
-        df = df.dropna()
+        df=df.dropna()
         
-        self.processed_data = df
+        self.processed_data=df
         return df
     
     def get_xy_data(self):
@@ -285,8 +285,8 @@ class TickerValidator:
         if self.processed_data is None:
             raise ValueError("No processed data available. Please process data first.")
         
-        X = self.processed_data['Volume_delta'].values
-        y = self.processed_data['Volatility_delta'].values
+        X=self.processed_data['Volume_delta'].values
+        y=self.processed_data['Volatility_delta'].values
         
         return X, y
     
@@ -314,14 +314,14 @@ class TickerValidator:
 
 # Example usage
 if __name__ == "__main__":
-    validator = TickerValidator()
+    validator=TickerValidator()
     
     # Test with a valid ticker
-    ticker = input("Enter ticker symbol (e.g., TSLA, AAPL): ").strip()
+    ticker=input("Enter ticker symbol (e.g., TSLA, AAPL): ").strip()
     
-    X, y = validator.get_full_pipeline(ticker, years=5)
+    X, y=validator.get_full_pipeline(ticker, years=5)
     
     if X is not None:
-        print(f"\n📊 Ready for modeling:")
+        print(f"\nReady for modeling:")
         print(f"   X (Volume_delta): {len(X)} points")
         print(f"   y (Volatility_delta): {len(y)} points")

@@ -16,15 +16,15 @@ class StockVolatilityAnalyzer:
     """Main class to run complete analysis pipeline"""
     
     def __init__(self):
-        self.validator = TickerValidator()
-        self.fitter = ModelFitter()
-        self.selector = ModelSelector()
-        self.visualizer = None
+        self.validator=TickerValidator()
+        self.fitter=ModelFitter()
+        self.selector=ModelSelector()
+        self.visualizer=None
         
-        self.ticker = None
-        self.X = None
-        self.y = None
-        self.results = None
+        self.ticker=None
+        self.X=None
+        self.y=None
+        self.results=None
     
     def run_analysis(self, ticker_symbol, years=5, create_plots=True, 
                      output_dir='results', metric='rmse'):
@@ -44,18 +44,18 @@ class StockVolatilityAnalyzer:
         
         # Step 1: Validate and fetch data
         print("\n[STEP 1/4] Validating ticker and fetching data...")
-        self.X, self.y = self.validator.get_full_pipeline(ticker_symbol, years)
+        self.X, self.y=self.validator.get_full_pipeline(ticker_symbol, years)
         
         if self.X is None or self.y is None:
             print("\nAnalysis failed.")
             return False
         
-        self.ticker = self.validator.ticker
+        self.ticker=self.validator.ticker
         print(f"Analyzing {len(self.X)} data points for {self.ticker}")
         
         # Step 2: Fit all models
         print("\n[STEP 2/4] Fitting regression models...")
-        self.results = self.fitter.fit_all_models(self.X, self.y)
+        self.results=self.fitter.fit_all_models(self.X, self.y)
         
         print("\n[STEP 3/4] Analyzing model performance...")
         self.selector.print_rankings(self.results, self.X, metric=metric)
@@ -64,12 +64,12 @@ class StockVolatilityAnalyzer:
         # Step 4: Create simplified visualizations (only fitting equations)
         if create_plots:
             print("\n[STEP 4/4] Creating visualizations...")
-            self.visualizer = ModelVisualizer(self.ticker)
+            self.visualizer=ModelVisualizer(self.ticker)
             # Show only the comparison grid (fitting equations in subplots)
             self.visualizer.plot_comparison_grid(self.X, self.y, self.results)
             
         # Export results to CSV
-        csv_path = os.path.join(output_dir, f'{self.ticker}_results.csv')
+        csv_path=os.path.join(output_dir, f'{self.ticker}_results.csv')
         self.selector.export_results(self.results, self.X, self.ticker, csv_path)
         
         print("\n" + "="*80)
@@ -83,7 +83,7 @@ class StockVolatilityAnalyzer:
         if self.results is None:
             return None
         
-        best_name, best_result = self.fitter.get_best_model(self.results)
+        best_name, best_result=self.fitter.get_best_model(self.results)
         return {
             'ticker': self.ticker,
             'model': best_name,
@@ -100,11 +100,11 @@ def interactive_mode():
     print("🎯 STOCK VOLATILITY ANALYZER")
     print("="*80)
     
-    analyzer = StockVolatilityAnalyzer()
+    analyzer=StockVolatilityAnalyzer()
     
     while True:
         # Get ticker from user
-        ticker = input("\nEnter stock ticker (e.g., TSLA, AAPL) or 'q' to quit: ").strip()
+        ticker=input("\nEnter stock ticker (e.g., TSLA, AAPL) or 'q' to quit: ").strip()
         
         if ticker.lower() == 'q':
             print("\n👋 Thank you for using Stock Volatility Analyzer!\n")
@@ -124,37 +124,37 @@ def interactive_mode():
         
         # Get years of data
         try:
-            years_input = input("\nEnter years of historical data [default: 5]: ").strip()
-            years = int(years_input) if years_input else 5
+            years_input=input("\nEnter years of historical data [default: 5]: ").strip()
+            years=int(years_input) if years_input else 5
         except ValueError:
             print("⚠️  Invalid input. Using default 5 years.")
-            years = 5
+            years=5
         
         # Get primary metric
         print("\nChoose primary metric for model selection:")
         print("  1. RMSE (Root Mean Squared Error) - default")
         print("  2. MAE (Mean Absolute Error)")
         print("  3. R² (Coefficient of Determination)")
-        metric_input = input("Enter choice (1/2/3) [default: 1]: ").strip()
+        metric_input=input("Enter choice (1/2/3) [default: 1]: ").strip()
         
-        metric_map = {'1': 'rmse', '2': 'mae', '3': 'r2'}
-        metric = metric_map.get(metric_input, 'rmse')
+        metric_map={'1': 'rmse', '2': 'mae', '3': 'r2'}
+        metric=metric_map.get(metric_input, 'rmse')
         
         # Run analysis
-        success = analyzer.run_analysis(ticker, years=years, 
+        success=analyzer.run_analysis(ticker, years=years, 
                                        create_plots=True,
                                        metric=metric)
         
         if success:
             # Show best model details
-            best = analyzer.get_best_model_details()
+            best=analyzer.get_best_model_details()
             if best:
                 print(f"\nBEST MODEL EQUATION:")
                 print(f"   Model: {best['model']}")
                 print(f"   Parameters: {[f'{p:.6e}' for p in best['params']]}")
         
         # Ask if continue
-        continue_input = input("\nAnalyze another stock? (y/n): ").strip().lower()
+        continue_input=input("\nAnalyze another stock? (y/n): ").strip().lower()
         if continue_input != 'y':
             print("\n👋 Thank you for using Stock Volatility Analyzer!\n")
             break
@@ -164,7 +164,7 @@ def main():
     """Main entry point"""
     import argparse
     
-    parser = argparse.ArgumentParser(
+    parser=argparse.ArgumentParser(
         description='Stock Volatility vs Volume Analysis Tool'
     )
     parser.add_argument(
@@ -196,14 +196,14 @@ def main():
         help='Output directory (default: results)'
     )
     
-    args = parser.parse_args()
+    args=parser.parse_args()
     
     if args.batch:
         # Batch mode
         print("Batch mode not implemented in this version.")
     elif args.ticker:
         # Single ticker mode
-        analyzer = StockVolatilityAnalyzer()
+        analyzer=StockVolatilityAnalyzer()
         analyzer.run_analysis(args.ticker, years=args.years,
                             output_dir=args.output, metric=args.metric)
     else:
@@ -231,15 +231,15 @@ class StockVolatilityAnalyzer:
     """Main class to run complete analysis pipeline"""
     
     def __init__(self):
-        self.validator = TickerValidator()
-        self.fitter = ModelFitter()
-        self.selector = ModelSelector()
-        self.visualizer = None
+        self.validator=TickerValidator()
+        self.fitter=ModelFitter()
+        self.selector=ModelSelector()
+        self.visualizer=None
         
-        self.ticker = None
-        self.X = None
-        self.y = None
-        self.results = None
+        self.ticker=None
+        self.X=None
+        self.y=None
+        self.results=None
     
     def run_analysis(self, ticker_symbol, years=5, create_plots=True, 
                      output_dir='results', metric='rmse'):
@@ -254,23 +254,23 @@ class StockVolatilityAnalyzer:
             metric (str): Primary metric for model selection ('rmse', 'mae', 'r2')
         """
         print("\n" + "="*80)
-        print("📈 STOCK VOLATILITY vs VOLUME ANALYSIS")
+        print("STOCK VOLATILITY vs VOLUME ANALYSIS")
         print("="*80)
         
         # Step 1: Validate and fetch data
         print("\n[STEP 1/4] Validating ticker and fetching data...")
-        self.X, self.y = self.validator.get_full_pipeline(ticker_symbol, years)
+        self.X, self.y=self.validator.get_full_pipeline(ticker_symbol, years)
         
         if self.X is None or self.y is None:
-            print("\n❌ Analysis failed.")
+            print("\nAnalysis failed.")
             return False
         
-        self.ticker = self.validator.ticker
-        print(f"✅ Analyzing {len(self.X)} data points for {self.ticker}")
+        self.ticker=self.validator.ticker
+        print(f"Analyzing {len(self.X)} data points for {self.ticker}")
         
         # Step 2: Fit all models
         print("\n[STEP 2/4] Fitting regression models...")
-        self.results = self.fitter.fit_all_models(self.X, self.y)
+        self.results=self.fitter.fit_all_models(self.X, self.y)
         
         print("\n[STEP 3/4] Analyzing model performance...")
         self.selector.print_rankings(self.results, self.X, metric=metric)
@@ -279,16 +279,16 @@ class StockVolatilityAnalyzer:
         # Step 4: Create simplified visualizations (only fitting equations)
         if create_plots:
             print("\n[STEP 4/4] Creating visualizations...")
-            self.visualizer = ModelVisualizer(self.ticker)
+            self.visualizer=ModelVisualizer(self.ticker)
             # Show only the comparison grid (fitting equations in subplots)
             self.visualizer.plot_comparison_grid(self.X, self.y, self.results)
             
         # Export results to CSV
-        csv_path = os.path.join(output_dir, f'{self.ticker}_results.csv')
+        csv_path=os.path.join(output_dir, f'{self.ticker}_results.csv')
         self.selector.export_results(self.results, self.X, self.ticker, csv_path)
         
         print("\n" + "="*80)
-        print("✅ ANALYSIS COMPLETE!")
+        print("ANALYSIS COMPLETE!")
         print("="*80 + "\n")
         
         return True
@@ -298,7 +298,7 @@ class StockVolatilityAnalyzer:
         if self.results is None:
             return None
         
-        best_name, best_result = self.fitter.get_best_model(self.results)
+        best_name, best_result=self.fitter.get_best_model(self.results)
         return {
             'ticker': self.ticker,
             'model': best_name,
@@ -312,52 +312,49 @@ class StockVolatilityAnalyzer:
 def interactive_mode():
     """Runs the analyzer in simplified interactive mode"""
     print("\n" + "="*80)
-    print("🎯 STOCK VOLATILITY ANALYZER")
+    print("STOCK VOLATILITY ANALYZER")
     print("="*80)
     
-    analyzer = StockVolatilityAnalyzer()
-    
-    # Use static defaults
-    years = 5
-    metric = 'rmse'
+    analyzer=StockVolatilityAnalyzer()
+    years=5
+    metric='rmse'
     
     while True:
-        # Get ticker from user
-        ticker = input("\nEnter stock ticker (e.g., TSLA, AAPL) or 'q' to quit: ").strip()
+        ticker=input("\nEnter stock ticker (e.g., TSLA, AAPL) or 'q' to quit: ").strip()
         
         if ticker.lower() == 'q':
-            print("\n👋 Thank you for using Stock Volatility Analyzer!\n")
+            print("\nThank you for using Stock Volatility Analyzer!\n")
             break
         
         if not ticker:
-            print("⚠️  Please enter a valid ticker symbol.")
+            print("Please enter a valid ticker symbol.")
             continue
 
         # Validate ticker first
-        print(f"\n🔍 Validating ticker: {ticker}")
+        print(f"\nValidating ticker: {ticker}")
         if not analyzer.validator.validate_ticker(ticker):
-            print(f"❌ Ticker '{ticker}' is invalid. Please try again.")
+            print(f"Ticker '{ticker}' is invalid. Please try again.")
             continue
         else:
-            print(f"✅ Ticker '{ticker}' is valid!")
+            print(f"Ticker '{ticker}' is valid!")
         
         # Run analysis with static defaults (5 years, RMSE metric)
-        success = analyzer.run_analysis(ticker, years=years, 
+        success=analyzer.run_analysis(ticker, years=years, 
                                        create_plots=True,
                                        metric=metric)
         
         if success:
             # Show best model details
-            best = analyzer.get_best_model_details()
+            best=analyzer.get_best_model_details()
             if best:
-                print(f"\n📋 BEST MODEL EQUATION:")
+                print(f"\nBEST MODEL EQUATION:")
                 print(f"   Model: {best['model']}")
                 print(f"   Parameters: {[f'{p:.6e}' for p in best['params']]}")
         
         # Ask if continue
-        continue_input = input("\nAnalyze another stock? (y/n): ").strip().lower()
+        continue_input=input("\nAnalyze another stock? (y/n): ").strip().lower()
         if continue_input != 'y':
-            print("\n👋 Thank you for using Stock Volatility Analyzer!\n")
+            print("\nThank you for using Stock Volatility Analyzer!\n")
             break
 
 
@@ -365,7 +362,7 @@ def main():
     """Main entry point"""
     import argparse
     
-    parser = argparse.ArgumentParser(
+    parser=argparse.ArgumentParser(
         description='Stock Volatility vs Volume Analysis Tool'
     )
     parser.add_argument(
@@ -397,14 +394,14 @@ def main():
         help='Output directory (default: results)'
     )
     
-    args = parser.parse_args()
+    args=parser.parse_args()
     
     if args.batch:
         # Batch mode
         print("Batch mode not implemented in this version.")
     elif args.ticker:
         # Single ticker mode
-        analyzer = StockVolatilityAnalyzer()
+        analyzer=StockVolatilityAnalyzer()
         analyzer.run_analysis(args.ticker, years=args.years,
                             output_dir=args.output, metric=args.metric)
     else:
