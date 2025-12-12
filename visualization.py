@@ -1,6 +1,6 @@
 """
 Module 3: Visualization
-Clean plots with improved layout and metrics table
+Clean plots with improved layout (table removed)
 """
 
 import matplotlib.pyplot as plt
@@ -22,12 +22,11 @@ class ModelVisualizer:
         cols = 4
         rows = (n_models + cols - 1) // cols
 
-        # Create figure with extra space at bottom for metrics table
-        fig = plt.figure(figsize=(20, 5*rows + 2))
+        # Create figure without extra space for table
+        fig = plt.figure(figsize=(20, 5*rows))
         
-        # Create grid spec with space for table
-        gs = fig.add_gridspec(rows + 1, cols, height_ratios=[5]*rows + [1.5], 
-                             hspace=0.35, wspace=0.25)
+        # Create grid spec without table row
+        gs = fig.add_gridspec(rows, cols, hspace=0.35, wspace=0.25)
         
         fig.suptitle(f'{self.ticker} - All Models Comparison ({n_models} models)', 
                      fontsize=18, fontweight='bold', y=0.995)
@@ -64,51 +63,6 @@ class ModelVisualizer:
         # Hide unused subplots
         for j in range(i+1, len(axes)):
             axes[j].axis('off')
-
-        # Create metrics summary table at bottom
-        ax_table = fig.add_subplot(gs[rows, :])
-        ax_table.axis('off')
-        
-        # Prepare table data
-        table_data = []
-        for i, (name, res) in enumerate(sorted_results):
-            table_data.append([
-                name,
-                f"{res['rmse']:.6f}",
-                f"{res['r2']:.4f}",
-                f"{res['mae']:.6f}"
-            ])
-        
-        # Create table
-        table = ax_table.table(
-            cellText=table_data,
-            colLabels=['Model Name', 'RMSE', 'R²', 'MAE'],
-            cellLoc='center',
-            loc='center',
-            colWidths=[0.4, 0.2, 0.2, 0.2]
-        )
-        
-        table.auto_set_font_size(False)
-        table.set_fontsize(9)
-        table.scale(1, 2)
-        
-        # Style header row
-        for i in range(4):
-            table[(0, i)].set_facecolor('#4472C4')
-            table[(0, i)].set_text_props(weight='bold', color='white')
-        
-        # Alternate row colors
-        for i in range(1, len(table_data) + 1):
-            for j in range(4):
-                if i % 2 == 0:
-                    table[(i, j)].set_facecolor('#E7E6E6')
-                else:
-                    table[(i, j)].set_facecolor('#F2F2F2')
-        
-        # Highlight top 3 models
-        for i in range(1, min(4, len(table_data) + 1)):
-            table[(i, 0)].set_facecolor('#C6E0B4')
-            table[(i, 0)].set_text_props(weight='bold')
 
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight', facecolor='white')
